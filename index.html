@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ChemViewer 3D</title>
+<link rel="stylesheet" href="style.css" />
+<!-- Three.js je zde přes CDN. README obsahuje postup pro lokální/offline kopii. -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app">
+  <!-- 3D část aplikace -->
+  <div id="viewport">
+    <div id="viewport-hint">
+      <span class="desktop-hint">Levé tlačítko: rotace · Kolečko: zoom</span>
+      <span class="mobile-hint">Tažením otáčejte · Sevřením přibližujte</span>
+    </div>
+  </div>
+
+  <button id="info-button" class="info-button" type="button" aria-label="Informace o molekule" aria-controls="panel" aria-expanded="false">
+    i
+  </button>
+  <button id="panel-backdrop" class="panel-backdrop" type="button" aria-label="Zavřít informační nabídku" hidden></button>
+
+  <!-- Informační panel -->
+  <aside id="panel" aria-label="Informace o molekule" aria-hidden="false">
+    <div class="panel-header">
+      <div>
+        <h1>ChemViewer 3D</h1>
+        <div class="subtitle">Vizualizátor molekul</div>
+      </div>
+      <button id="close-panel-button" class="close-panel-button" type="button" aria-label="Zavřít informační nabídku">×</button>
+    </div>
+
+    <div class="card">
+      <h2>Aktivní molekula</h2>
+      <select id="molecule-select" class="molecule-select"></select>
+    </div>
+
+    <div class="card">
+      <h2>Vlastnosti</h2>
+      <div class="row"><span class="label">Název:</span><span class="value" id="prop-name">—</span></div>
+      <div class="row"><span class="label">Vzorec:</span><span class="value" id="prop-formula">—</span></div>
+      <div class="row"><span class="label">Molární hmotnost:</span><span class="value" id="prop-mass">—</span></div>
+      <div class="row"><span class="label">Hybridizace:</span><span class="value" id="prop-hybridization">—</span></div>
+      <div class="row"><span class="label">Geometrie:</span><span class="value" id="prop-geometry">—</span></div>
+      <div class="row"><span class="label">Úhel vazeb:</span><span class="value" id="prop-angle">—</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Legenda atomů</h2>
+      <div id="legend-list"></div>
+    </div>
+
+    <div class="card">
+      <h2>Elektronové páry</h2>
+        <div class="pair-explanation"><span class="pair-dot" aria-hidden="true"><span></span><span></span></span><span>Průsvitný lalok se dvěma kuličkami znázorňuje volný elektronový pár.</span></div>
+    </div>
+
+    <div class="card warning-card" id="teacher-warning" hidden></div>
+
+    <div class="card" id="upload-card">
+      <h2>Import XYZ</h2>
+      <button class="upload-btn" id="upload-btn">Nahrát .XYZ soubor</button>
+      <input type="file" id="file-input" accept=".xyz,.txt" />
+      <div id="upload-status"></div>
+    </div>
+  </div>
+</div>
+<script type="module" src="script.js"></script>
+</body>
+</html>

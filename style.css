@@ -1,0 +1,402 @@
+/* Dark laboratory-style interface for the 3D molecule viewer. */
+
+:root {
+  --bg-viewport: #090b0f;
+  --bg-panel: #11151b;
+  --bg-card: #171c23;
+  --border: #29313b;
+  --text-primary: #f2f4f7;
+  --text-secondary: #9aa4b2;
+  --accent-blue: #60a5fa;
+  --accent-green: #4ade80;
+  --accent-red: #f87171;
+  --accent-purple: #a78bfa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg-viewport);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+#viewport {
+  flex: 1 1 auto;
+  position: relative;
+  background: var(--bg-viewport);
+  min-width: 0;
+}
+
+#viewport canvas {
+  display: block;
+}
+
+#viewport-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: rgba(17, 21, 27, 0.9);
+  border: 1px solid var(--border);
+  padding: 7px 10px;
+  border-radius: 7px;
+  pointer-events: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.mobile-hint {
+  display: none;
+}
+
+#panel {
+  width: 360px;
+  flex: 0 0 360px;
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border);
+  padding: 24px 20px;
+  overflow-y: auto;
+  box-shadow: -4px 0 18px rgba(0, 0, 0, 0.3);
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.close-panel-button,
+.info-button,
+.panel-backdrop {
+  display: none;
+}
+
+#panel h1 {
+  font-size: 22px;
+  margin: 0 0 2px;
+  color: var(--accent-blue);
+  letter-spacing: -0.01em;
+}
+
+#panel .subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+  font-size: 13px;
+  margin: 0 0 12px;
+  color: var(--text-primary);
+  font-weight: 650;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.row .label {
+  color: var(--text-secondary);
+}
+
+.row .value {
+  color: var(--accent-green);
+  font-weight: 650;
+  text-align: right;
+}
+
+.molecule-select {
+  width: 100%;
+  background: #0d1117;
+  color: var(--text-primary);
+  border: 1px solid #343d49;
+  border-radius: 7px;
+  padding: 9px 10px;
+  font-size: 13px;
+}
+
+.molecule-select:focus {
+  outline: 2px solid rgba(96, 165, 250, 0.35);
+  outline-offset: 1px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 13px;
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex: 0 0 14px;
+  box-shadow: inset -2px -2px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.pair-explanation {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.pair-dot {
+  position: relative;
+  width: 30px;
+  height: 16px;
+  flex: 0 0 30px;
+  background: linear-gradient(#9b8bc7, #9b8bc7) left center / 17px 3px no-repeat;
+}
+
+.pair-dot::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(155, 139, 199, 0.22);
+  border: 1px solid rgba(195, 183, 228, 0.8);
+}
+
+.pair-dot span {
+  position: absolute;
+  z-index: 1;
+  top: 5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c3b7e4;
+  box-shadow: inset -1px -1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.pair-dot span:first-child {
+  right: 8px;
+}
+
+.pair-dot span:last-child {
+  right: 2px;
+}
+
+.warning-card {
+  border-color: #7c5b2a;
+  background: #241d11;
+  color: #f0c674;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.upload-btn {
+  width: 100%;
+  background: #2563eb;
+  color: white;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.upload-btn:hover {
+  background: #3b82f6;
+}
+
+#file-input {
+  display: none;
+}
+
+#upload-status {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  min-height: 14px;
+}
+
+#upload-status.error {
+  color: var(--accent-red);
+}
+
+#upload-status.ok {
+  color: var(--accent-green);
+}
+
+#panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+#panel::-webkit-scrollbar-thumb {
+  background: #343d49;
+  border-radius: 4px;
+}
+
+#panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (max-width: 720px) {
+  html,
+  body {
+    height: 100%;
+    overscroll-behavior: none;
+  }
+
+  #app {
+    display: block;
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  #panel {
+    position: fixed;
+    z-index: 21;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(360px, 88vw);
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    padding: calc(20px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom));
+    border: 0;
+    border-left: 1px solid var(--border);
+    transform: translateX(102%);
+    visibility: hidden;
+    transition: transform 220ms ease, visibility 220ms;
+    box-shadow: -8px 0 28px rgba(0, 0, 0, 0.45);
+  }
+
+  #panel.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 220ms ease;
+  }
+
+  .panel-header {
+    align-items: flex-start;
+  }
+
+  .close-panel-button {
+    display: block;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    margin: -8px -8px 0 0;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #0d1117;
+    color: var(--text-primary);
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .info-button {
+    display: block;
+    position: fixed;
+    z-index: 22;
+    top: calc(12px + env(safe-area-inset-top));
+    right: calc(12px + env(safe-area-inset-right));
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid #536171;
+    border-radius: 50%;
+    background: rgba(17, 21, 27, 0.94);
+    color: var(--text-primary);
+    font-size: 20px;
+    font-weight: 650;
+    line-height: 1;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+  #app.menu-open .info-button {
+    visibility: hidden;
+  }
+
+  .panel-backdrop:not([hidden]) {
+    display: block;
+    position: fixed;
+    z-index: 20;
+    inset: 0;
+    border: 0;
+    background: rgba(0, 0, 0, 0.48);
+    cursor: default;
+  }
+
+  #upload-card {
+    display: none;
+  }
+
+  #viewport {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  #viewport-hint {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: calc(12px + env(safe-area-inset-left));
+  }
+
+  .desktop-hint {
+    display: none;
+  }
+
+  .mobile-hint {
+    display: inline;
+  }
+
+  .molecule-select {
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  .upload-btn {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #panel {
+    transition: none;
+  }
+}
